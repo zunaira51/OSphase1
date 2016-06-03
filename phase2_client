@@ -1,0 +1,25 @@
+from socket import *
+from threading import Thread
+import sys
+
+HOST = 'localhost'
+PORT = 8101
+ADDR = (HOST, PORT)
+s = socket(AF_INET, SOCK_STREAM)
+s.connect(ADDR)
+#print 'Select a client to communicate With:'
+ 
+def recv():
+    while True:
+        data = s.recv(1024)
+        if not data:
+        	sys.exit(0)
+        print data+ '\n'
+Thread(target=recv).start()
+input=raw_input('Select a client to communicate With: \n')
+s.send(input)
+while True:
+    data = raw_input('Enter: ')
+    s.send(data)
+
+s.close()
