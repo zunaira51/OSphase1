@@ -3,16 +3,20 @@ import sys
 from thread import *
 
 HOST = ''
-PORT = 8101
+PORT = 8102
 arr=[]
 arr1=[]
 arr2=[]
+arr3=[]
+arr4=[]
 i=0
 k=0
 l=0
 chat=0
 chat1=0
 new=''
+new1=''
+arr3=['Asma','Sam','Usman','Zunaira','Annie','Yasir','Sana']
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print 'Socket created'
 
@@ -32,15 +36,14 @@ print 'Socket now listening'
 
 def clientthread(conn):
     # Sending message to connected client
-   # conn.sendall(str(arr[1]))
     global j,k
     j=0
     k=0
     while j !=i-1:
-   	 conn.sendall(arr1[j])
+   	 conn.sendall(arr4[j])
    	 j=j+1
     while k !=i:
-	arr[k].sendall(new)
+	arr[k].sendall(new1)
 	k=k+1
     chat=conn.recv(1024)
     while True:
@@ -49,47 +52,17 @@ def clientthread(conn):
         reply =  data
         if not data:
             break
-
-        if conn == arr[0]:
-		print(chat+ 'is aaa')
-	 #   chat.sendall(chat) 
-		if chat==arr2[1]:
-		    print (arr2[1]+'sent msg to'+arr2[0])
-		    arr[1].sendall(reply)
-		elif chat==arr2[2]: 
-		    print (arr2[2]+'sent msg to'+arr2[0])
-
-		    arr[2].sendall(reply)	
-	elif conn==arr[1]:
-		print(chat+ 'is bbb ')
-		if chat==arr2[0]:
-		    print (arr2[0]+'sent msg to'+arr2[1])    
-                    arr[0].sendall(reply)
-        	elif chat==arr2[2]:
-		    print (arr2[2]+'sent msg to'+arr2[1])
-                    arr[2].sendall(reply)
-	elif conn==arr[2]:
-		print(chat+ 'is cccc \n' )
-		print(arr[0])
-                if chat==arr2[0]:
-		    print (arr2[0]+'sent msg to'+arr2[1])
-                    arr[0].sendall(reply)
-                elif chat==arr2[1]:
-		    print (arr2[0]+'sent msg to'+arr2[1])
-                    arr[1].sendall(reply)
-	else: 
-		print ((conn)+'not matched')
-	 #   arr[0].sendall(addr[0])
- #       else:
-	  #  arr[0].sendall(arr[0])	
-#	    arr[0].sendall(reply)
-          #  arr[0].sendall(addr[0])
-
-       
+	for l in range(i):
+         if conn == arr[l]:
+         	for m in range(i):
+	 	 if l==m:
+           	  continue 
+	         if chat==arr4[m]:
+	          arr[m].sendall(reply)
+	        m=m+1
+	l=l+1
     # came out of loop
     conn.close()
-j=0
-arr1=[]
 # now keep talking with the client
 while 1:
     # wait to accept a connection - blocking call
@@ -98,11 +71,13 @@ while 1:
     print 'Connected with ' + addr[0] + ':' + str(addr[1])
     # start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
     arr2.append(str(addr[1]))
+    arr4.append(arr3[i])
     arr1.append(addr[0] + ': ' + str(addr[1])+ '\n')
     chat1=str(addr[1])
+    new1=arr4[i]
     new=addr[0] + ': ' + str(addr[1])+ '\n'
     start_new_thread(clientthread, (conn,))
+    print 'Connected with ' +arr4[i]
     i+=1
-
 s.close()
 
